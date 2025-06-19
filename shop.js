@@ -74,6 +74,7 @@ if (document.readyState !== "loading") {
   document.addEventListener("DOMContentLoaded", renderBasketIndicator);
 }
 
+
 // Patch basket functions to update indicator
 const origAddToBasket = window.addToBasket;
 window.addToBasket = function (product) {
