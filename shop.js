@@ -11,6 +11,14 @@ function getBasket() {
 
 function addToBasket(product) {
   const basket = getBasket();
+  if (basket.length >= 10) {
+    // Custom event to notify UI of basket full
+    const event = new CustomEvent("basketFull", {
+      detail: { message: "Your basket is full. You cannot add more than 10 items." }
+    });
+    window.dispatchEvent(event);
+    return;
+  }
   basket.push(product);
   localStorage.setItem("basket", JSON.stringify(basket));
 }
@@ -30,20 +38,11 @@ function renderBasket() {
     if (cartButtonsRow) cartButtonsRow.style.display = "none";
     return;
   }
-  // Group products by type and count quantities
-  const productCounts = {};
   basket.forEach((product) => {
-    if (!productCounts[product]) {
-      productCounts[product] = 0;
-    }
-    productCounts[product]++;
-  });
-  Object.keys(productCounts).forEach((product) => {
     const item = PRODUCTS[product];
     if (item) {
-      const quantity = productCounts[product];
       const li = document.createElement("li");
-      li.innerHTML = `<span class='basket-emoji'>${item.emoji}</span> <span>${quantity}x ${item.name}</span>`;
+      li.innerHTML = `<span class='basket-emoji'>${item.emoji}</span> <span>${item.name}</span>`;
       basketList.appendChild(li);
     }
   });
